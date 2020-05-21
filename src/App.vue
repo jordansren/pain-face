@@ -9,10 +9,10 @@
     <!-- Image Upload -->
     <form class="split left center">
       <h3 style="text-align:center">Images</h3>
-      <input class="center" type="file" accept="image/*" @change="onImageChosen" v-if="!isUploadingImage"><br>
+      <input class="center" type="file" accept="image/jpeg,image/png" @change="onImageChosen" v-if="!isUploadingImage"><br>
       <div class="image-preview" v-if="imageData.length > 0">
         <div v-for="img in imageData" :key="img">
-          <img class="preview imageStack" :src="img">
+          <img class="center preview imageStack" :src="img">
         </div>
       </div>
       <button class="center clear" @click="onImageUpload" v-if="!isUploadingImage"> 
@@ -58,12 +58,12 @@
         videoData: [],
         uploadingImage: false,
         uploadingVideo: false,
-        output: null
+        outputImage: null,
+        outputVideo: null
       }
     },
     computed: {
       isMultipleImages() {
-        console.log(this.images.length);
         return this.images.length > 1;
       },
       isMultipleVideos() {
@@ -84,12 +84,21 @@
     },
     methods: {
       onImageChosen(event) {
-        /* Loop over files, check for only videos */
+        /* Loop over files, check for only images */
         Array
           .from(Array(event.target.files.length).keys())
           .map(x => {
-            this.showImage(event, x)
-            this.images.push(event.target.files[x]);
+            let tag = event.target.files[x].name.split(".")[1];
+            if (tag == "png" || tag == "jpeg" || tag == "jpg") {
+              /* Since we are only doing single files for now, this if statement
+                  will ensure only one file is stored at a time */
+              if (this.images.length == 1) {
+                this.images = [];
+                this.imageData = [];
+              }
+              this.showImage(event, x)
+              this.images.push(event.target.files[x]);
+            }
           });
       },
       onVideoChosen(event) {
@@ -97,13 +106,24 @@
         Array
           .from(Array(event.target.files.length).keys())
           .map(x => {
-            /* this.showVideo(event, x); */
-            this.videos.push(event.target.files[x]);
+            let tag = event.target.files[x].name.split(".")[1];
+            if (tag == "mp4") {
+              /* Since we are only doing single files for now, this if statement
+                  will ensure only one file is stored at a time */
+              if (this.videos.length == 1) {
+                this.videos = [];
+                this.videoData = [];
+              }
+              /* this.showVideo(event, x); */
+              this.videos.push(event.target.files[x]);
+            }
           });
       },
-      onImageUpload() {
+      async onImageUpload() {
         this.uploadingImage = true;
         /* Something here to upload all images in this.files */
+/*         this.outputImage = await axios.post("./TestBackend.py", this.images[0]);
+        console.log(this.outputImage); */
         /*  const fd = new formData() 
             this.images.forEach(x -> {
               fd.append("image", x, x.name)
@@ -112,7 +132,7 @@
             this.reset();
                  */
       },
-      onVideoUpload() {
+      async onVideoUpload() {
         this.uploadingVideo = true;
         /* Something here to upload all images in this.files */
         /*  const fd = new formData() 
@@ -212,7 +232,6 @@ img.preview {
 }
 
 .imageStack {
-  float: left;
   padding: 5px;
   display: block; 
   position: relative;
