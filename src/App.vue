@@ -9,7 +9,7 @@
     <!-- Image Upload -->
     <form class="split left center">
       <h3 style="text-align:center">Images</h3>
-      <input class="center" type="file" accept="image/*" @change="onImageChosen" v-if="!isUploadingImage" multiple><br>
+      <input class="center" type="file" accept="image/*" @change="onImageChosen" v-if="!isUploadingImage"><br>
       <div class="image-preview" v-if="imageData.length > 0">
         <div v-for="img in imageData" :key="img">
           <img class="preview imageStack" :src="img">
@@ -20,16 +20,16 @@
         <p v-else>Upload Image</p>
       </button>
       <div class="center clear" v-if="isUploadingImage">
-        <p v-if="isMultipleImages">Processing Images...</p>
-        <p v-else>Processing Image...</p>
-        <div class="loader"></div>
+        <h3 style="text-align:center" v-if="isMultipleImages">Processing Images...</h3>
+        <h3 style="text-align:center" v-else>Processing Image...</h3>
+        <div class="center loader"></div>
       </div>
     </form>
 
     <!-- Video Upload -->
     <form class="split right center">
       <h3 style="text-align:center">Videos</h3>
-      <input class="center" type="file" accept="video/*" @change="onVideoChosen" v-if="!isUploadingVideo" multiple><br>
+      <input class="center" type="file" accept="video/*" @change="onVideoChosen" v-if="!isUploadingVideo"><br>
 <!--       <div class="image-preview" v-if="videoData.length > 0">
         <div v-for="vid in videoData" :key="vid">
           <img class="preview imageStack" :src="vid">
@@ -40,8 +40,9 @@
         <p v-else>Upload Video</p>
       </button>
       <div class="center clear" v-if="isUploadingVideo">
-        <h3>Processing Video...</h3>
-        <div class="loader"></div>
+        <h3 style="text-align:center" v-if="isMultipleVideos">Processing Videos...</h3>
+        <h3 style="text-align:center" v-else>Processing Video...</h3>
+        <div class="center loader"></div>
       </div>
     </form>
   </div>
@@ -83,6 +84,7 @@
     },
     methods: {
       onImageChosen(event) {
+        /* Loop over files, check for only videos */
         Array
           .from(Array(event.target.files.length).keys())
           .map(x => {
@@ -91,6 +93,7 @@
           });
       },
       onVideoChosen(event) {
+        /* Loop over files, check for only videos */
         Array
           .from(Array(event.target.files.length).keys())
           .map(x => {
