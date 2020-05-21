@@ -121,27 +121,17 @@
       },
       async onImageUpload() {
         this.uploadingImage = true;
-        /* Something here to upload all images in this.files */
-/*         this.outputImage = await axios.post("./TestBackend.py", this.images[0]);
-        console.log(this.outputImage); */
-        /*  const fd = new formData() 
-            this.images.forEach(x -> {
-              fd.append("image", x, x.name)
-            })
-            axios???.post(fd); (Confused here, .then???)
-            this.reset();
-                 */
+        const axios = require('axios');
+        const path = 'http://localhost:8080/'; /* Not sure what to put here */
+        this.outputImage = await axios.get(path);
+        this.uploadingImage = false;
       },
       async onVideoUpload() {
         this.uploadingVideo = true;
-        /* Something here to upload all images in this.files */
-        /*  const fd = new formData() 
-            this.videos.forEach(x -> {
-              fd.append("image", x, x.name)
-            })
-            axios???.post(fd); (Confused here, .then???)
-            this.reset();
-                 */
+        const axios = require('axios');
+        const path = 'http://localhost:8080/'; /* Not sure what to put here */
+        this.outputVideo = await axios.get(path);
+        this.uploadingVideo = false;
       },
       showImage(event, i) {
         var input = event.target;
