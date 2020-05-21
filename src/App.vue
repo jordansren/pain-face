@@ -1,24 +1,48 @@
 <template>
   <div id="app">
+    <!-- Title -->
     <div>
       <h1 style="text-align:center">aMGS Image and Video Upload Tool</h1>
-      <img class="center" src="./assets/Mouse.jpeg">
+      <img class="center mainImage" src="./assets/Mouse.jpeg">
     </div>
+
+    <!-- Image Upload -->
     <form class="split left center">
-      <h3>Images:</h3>
-      <input type="file" accept="image/*" @change="onImageChosen" multiple><br>
-      <button @click="onImageUpload">
+      <h3 style="text-align:center">Images</h3>
+      <input class="center" type="file" accept="image/*" @change="onImageChosen" v-if="!isUploadingImage" multiple><br>
+      <div class="image-preview" v-if="imageData.length > 0">
+        <div v-for="img in imageData" :key="img">
+          <img class="preview imageStack" :src="img">
+        </div>
+      </div>
+      <button class="center clear" @click="onImageUpload" v-if="!isUploadingImage"> 
         <p v-if="isMultipleImages">Upload Images</p>
         <p v-else>Upload Image</p>
       </button>
+      <div class="center clear" v-if="isUploadingImage">
+        <p v-if="isMultipleImages">Processing Images...</p>
+        <p v-else>Processing Image...</p>
+        <div class="loader"></div>
+      </div>
     </form>
+
+    <!-- Video Upload -->
     <form class="split right center">
-      <h3>Videos:</h3>
-      <input type="file" accept="video/*" @change="onVideoChosen" multiple><br>
-      <button @click="onVideoUpload">
+      <h3 style="text-align:center">Videos</h3>
+      <input class="center" type="file" accept="video/*" @change="onVideoChosen" v-if="!isUploadingVideo" multiple><br>
+<!--       <div class="image-preview" v-if="videoData.length > 0">
+        <div v-for="vid in videoData" :key="vid">
+          <img class="preview imageStack" :src="vid">
+        </div>
+      </div> -->
+      <button class="center clear" @click="onVideoUpload" v-if="!isUploadingVideo">
         <p v-if="isMultipleVideos">Upload Videos</p>
         <p v-else>Upload Video</p>
       </button>
+      <div class="center clear" v-if="isUploadingVideo">
+        <h3>Processing Video...</h3>
+        <div class="loader"></div>
+      </div>
     </form>
   </div>
 </template>
@@ -28,7 +52,12 @@
     data() {
       return {
         images: [],
-        videos: []
+        videos: [],
+        imageData: [],
+        videoData: [],
+        uploadingImage: false,
+        uploadingVideo: false,
+        output: null
       }
     },
     computed: {
@@ -37,8 +66,19 @@
         return this.images.length > 1;
       },
       isMultipleVideos() {
-        console.log(this.videos.length);
         return this.videos.length > 1;
+      },
+      isUploadingImage() {
+        return this.uploadingImage;
+      },
+      isUploadingVideo() {
+        return this.uploadingVideo;
+      },
+      numberOfImages() {
+        return this.images.length;
+      },
+      numberOfVideos() {
+        return this.videos.length;
       }
     },
     methods: {
@@ -46,6 +86,7 @@
         Array
           .from(Array(event.target.files.length).keys())
           .map(x => {
+            this.showImage(event, x)
             this.images.push(event.target.files[x]);
           });
       },
@@ -53,10 +94,12 @@
         Array
           .from(Array(event.target.files.length).keys())
           .map(x => {
+            /* this.showVideo(event, x); */
             this.videos.push(event.target.files[x]);
           });
       },
       onImageUpload() {
+        this.uploadingImage = true;
         /* Something here to upload all images in this.files */
         /*  const fd = new formData() 
             this.images.forEach(x -> {
@@ -67,6 +110,7 @@
                  */
       },
       onVideoUpload() {
+        this.uploadingVideo = true;
         /* Something here to upload all images in this.files */
         /*  const fd = new formData() 
             this.videos.forEach(x -> {
@@ -76,12 +120,34 @@
             this.reset();
                  */
       },
+      showImage(event, i) {
+        var input = event.target;
+        if (input.files && input.files[i]) {
+          var reader = new FileReader();
+          reader.onload = (e) => {
+              this.imageData.push(e.target.result);
+          }
+          reader.readAsDataURL(input.files[i]);
+        }
+      },
+/*       showVideo(event, i) {
+        var input = event.target;
+        if (input.files && input.files[i]) {
+          console.log(input.files[i]);
+          var reader = new FileReader();
+          reader.onload = (e) => {
+            console.log(e.target.result);
+              this.videoData.push(e.target.result);
+          }
+          reader.readAsDataURL(input.files[i]);
+        }
+      }, */
       reset(fileType) {
         if (fileType == "image") {
           this.images = [];
         } 
         if (fileType == "video") {
-          this.videos = [];
+          this.videos = []; 
         }
       }
     }
@@ -114,6 +180,44 @@
   body{
     background-color: rgb(149, 214, 240);
   }
+
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+img.preview {
+  width: 100px;
+  height: 70px;
+  background-color: white;
+  border: 1px solid #DDD;
+  padding: 5px;
+}
+
+.mainImage {
+  border: 1px solid rgb(119, 43, 43);
+  padding: 5px;
+}
+
+.imageStack {
+  float: left;
+  padding: 5px;
+  display: block; 
+  position: relative;
+}
+
+.clear {
+  clear: both;
+}
   /*
   form{
     margin-top: -100px;
