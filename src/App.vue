@@ -25,50 +25,53 @@
                 dark
                 flat
               >
-                <v-toolbar-title>Upload File</v-toolbar-title>
+                <v-toolbar-title>Accepted File Types: <br> jpg, png, jpeg, mp4</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      :href="source"
-                      icon
-                      large
-                      target="_blank"
-                      v-on="on"
-                    >
-                    </v-btn>
-                  </template>
-                </v-tooltip>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn class="primary" style="text-align: center" @click="onUpload" v-if="!uploadingFile">
-                    <p style="top:10px">Upload File</p>
+                  <v-btn rounded class="info" style="text-align: center" @click="onUpload" v-if="stage == 1">
+                    <p style="top:20px">Upload File</p>
                   </v-btn>
                 </v-card-actions> 
               </v-toolbar>
-              <div v-if="!uploadingFile">
+              <div v-if="stage == 1">
                 <div class="area">
                   <v-img class="icon center" src="./assets/upload.png" alt="upload"></v-img>
                   <input id="upload" type="file" accept="image/jpeg,image/png,image/jpg,video/mp4" @change="onFileChosen">
                 </div>
-                <div class="preview center">
-                  <div class="preview center" v-if="fileType=='image'">
-                    <img class="preview imageStack center" :src="imageData">
+                <div>
+                  <div class="preview" v-if="fileType=='image'">
+                    <img class="preview imageStack" :src="imageData">
                   </div>
-                  <video class="preview center" :src="blobURL" v-if="fileType=='video'"></video>
+                  <video class="preview imageStack" :src="blobURL" v-if="fileType=='video'"></video>
                   <p style="text-align: center" v-if="wrongFileType">
                     Oops! You did not input an file of type png, jpeg, jpg, or mp4. <br> Current file to upload: {{ file.name }}
                   </p>
                 </div>
               </div>
               <div v-else>
-                <div class="clear center" v-if="uploadingFile">
+                <div class="clear center" v-if="stage == 2">
                   <h3 style="text-align:center">Processing {{ file.name }}...</h3>
                   <v-progress-linear
                     indeterminate
                     color="green"
                   ></v-progress-linear>
                 </div>
+              </div>
+              <div v-if="stage == 3">
+                <div v-if="fileType=='image'">
+                  <img class="imageStack processedpreview center" :src="imageData">
+                </div>
+                <video class="imageStack processedpreview center" :src="blobURL" v-if="fileType=='video'"></video>
+                <h1 v-if="fileType == 'image'" :img="outputImage">
+                  Here is the data you want {{ img }}
+                </h1>
+                <h1 v-if="fileType == 'video'" :vid="outputVideo">
+                  Here is the data you want {{ vid }}
+                </h1>
+                <v-btn rounded class="info center" @click="reset">
+                  <p style="top:20px">Upload Another File</p>
+                </v-btn>
               </div>
             </v-card>
           </v-col>
@@ -87,9 +90,21 @@
         blobURL: null,
         fileType: null,
         uploadingFile: false,
+        finishedUpload: false,
         outputImage: null,
         outputVideo: null,
         wrongFileType: false
+      }
+    },
+    computed: {
+      stage() {
+        if (!this.uploadingfile && !this.finishedUpload) {
+          return 1;
+        } else if (this.uploadingFile && !this.finishedUpload) {
+          return 2;
+        } else {
+          return 3;
+        }
       }
     },
     methods: {
@@ -125,17 +140,18 @@
           });
       },
       async onUpload() {
-        let tag = this.file.name.split(".")[1];
         this.uploadingFile = true;
+/*         let tag = this.file.name.split(".")[1];
         const axios = require('axios');
         if (tag == "mp4") {
-          const path = 'http://localhost:8080/vidUpload'; /* Not sure what to put here */
+          const path = 'http://localhost:8080/vidUpload';
           this.outputImage = await axios.get(path);
         } else {
-          const path = 'http://localhost:8080/imgUpload'; /* Not sure what to put here */
+          const path = 'http://localhost:8080/imgUpload';
           this.outputVideo = await axios.get(path);
-        }
-        /* this.reset(); */
+        } */
+        this.finishedUpload = true;
+        this.uploadingFile = false;
       },
       showImage(event) {
         var input = event.target;
@@ -156,6 +172,7 @@
         this.imageData = null;
         this.blobURL = null;
         this.fileType = null;
+        this.finishedUpload = false;
         this.uploadingFile = false;
         this.outputImage = null;
         this.outputVideo = null;
@@ -172,14 +189,14 @@
 
 
   img.preview {
-    width: 300px;
+    max-width: 400px;
+    max-height: 200px;
     background-color: white;
     border: 1px solid #DDD;
     padding: 5px;
   }
 
   .mainImage {
-    border: 1px solid rgb(119, 43, 43);
     padding: 5px;
     width: 150px;
     height: 150px;
@@ -251,7 +268,11 @@
     top: 200px;
     max-height: 200px;
     max-width: 400px; 
-    text-align: center;
+  }
+
+  .processedpreview {
+    max-height: 300px;
+    max-width: 480px; 
   }
 
   .icon {
