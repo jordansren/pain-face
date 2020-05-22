@@ -42,7 +42,7 @@
         <p v-else>Upload Video</p>
       </button>
       <div class="center clear" v-if="uploadingVideo">
-        <h3 style="text-align:center" v-if="numberOfVideo > 1">Processing {{ videos[0].name }}...</h3>
+        <h3 style="text-align:center" v-if="numberOfVideos > 1">Processing {{ videos[0].name }}...</h3>
         <h3 style="text-align:center" v-else>Processing {{ videos[0].name }}...</h3>
         <div class="center loader"></div>
       </div>
@@ -168,14 +168,11 @@
     background-color: rgb(149, 214, 240);
   } 
 
-  /* Control the left side */
   .left {
     left: 0;
     top: 200;
     }
 
-
-  /* Control the right side */
   .right {
     right: 0;
     top: 200;
