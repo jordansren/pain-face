@@ -1,50 +1,73 @@
 <template>
   <v-app id="app">
     <!-- Title -->
-    <h1 style="text-align:center">aMGS Image and Video Upload Tool</h1>
-    <img class="center mainImage" src="./assets/Mouse.jpeg">
-
-    <!-- Image Upload -->
-    <form class="split left center">
-      <h3 style="text-align:center">Images</h3>
-      <input class="center" type="file" accept="image/jpeg,image/png" @change="onImageChosen" v-if="!uploadingImage"><br>
-      <p style="text-align:center" v-if="wrongImageType">
-        Oops! You did not input an image of type png, jpeg, or jpg. <br> Current file to upload: {{ images[0].name }}
-      </p>
-      <div class="image-preview" v-if="imageData.length > 0">
-        <div v-for="img in imageData" :key="img">
-          <img class="center preview imageStack" :src="img">
-        </div>
-      </div>
-      <button class="center clear" @click="onImageUpload" v-if="!uploadingImage"> 
-        <p v-if="numberOfImages > 1">Upload Images</p>
-        <p v-else>Upload Image</p>
-      </button>
-      <div class="center clear" v-if="uploadingImage">
-        <h3 style="text-align:center" v-if="numberOfImages > 1">Processing {{ images[0].name }}...</h3>
-        <h3 style="text-align:center" v-else>Processing {{ images[0].name }}...</h3>
-        <div class="center loader"></div>
-      </div>
-    </form>
-
+    <v-container>
+      <v-layout row wrap>
+        <v-flex xs6 md3>
+          <h1 class="display-2">aMGS <br> Upload Tool </h1>
+        </v-flex>
+        <v-flex xs6 md9>
+          <v-img class="mainImage center" src="./assets/Mouse.jpeg" alt="Mouse"></v-img>
+        </v-flex>
+      </v-layout>
+      <v-divider></v-divider>
+      <!-- Main Content and Uploader -->
+      <v-layout row wrap>
+        <!-- Drag and drop area -->
+        <v-layout column>
+          <v-flex xs6 md3 class="area">
+            <label>
+              <h3>Click or Drag to choose file</h3>
+            </label>
+            <v-img class="icon center" src="./assets/upload.png" alt="upload"></v-img>
+            <input id="upload" type="file" accept="image/jpeg,image/png" @change="onImageChosen">
+          </v-flex>
+        </v-layout>
+        <!-- Preview and upload -->
+        <v-layout column>
+          <v-flex xs6 md9>
+            <p v-if="wrongImageType">
+              Oops! You did not input an image of type png, jpeg, or jpg. <br> Current file to upload: {{ images[0].name }}
+            </p>
+            <v-btn class="primary" @click="onImageUpload" v-if="!uploadingImage">
+              <p v-if="numberOfImages > 1">Upload Images</p>
+              <p v-else>Upload Image</p>
+            </v-btn>
+          </v-flex>
+          <v-flex xs6 md9>
+            <div class="image-preview" v-if="imageData.length > 0">
+              <div v-for="img in imageData" :key="img">
+                <img class="preview imageStack" :src="img">
+              </div>
+            </div>
+          </v-flex>
+          <div class="clear" v-if="uploadingImage">
+            <h3 v-if="numberOfImages > 1">Processing {{ images[0].name }}...</h3>
+            <h3 v-else>Processing {{ images[0].name }}...</h3>
+            <div class="loader"></div>
+          </div>
+        </v-layout>
+      </v-layout>
+    </v-container>
+  
     <!-- Video Upload -->
-    <form class="split right center">
-      <h3 style="text-align:center">Videos</h3>
-      <input class="center" type="file" accept="video/*" @change="onVideoChosen" v-if="!uploadingVideo"><br>
-      <p style="text-align:center" v-if="wrongVideoType">
+    <!-- <form>
+      <h3 >Videos</h3>
+      <input type="file" accept="video/*" @change="onVideoChosen" v-if="!uploadingVideo"><br>
+      <p v-if="wrongVideoType">
         Oops! You did not input an image of type png, jpeg, or jpg. <br> Current file to upload: {{ videos[0].name }}
       </p>
-      <video style="width:300px" :src="blobURL" class="center" v-if="numberOfVideos > 0"></video>
-      <button class="center clear" @click="onVideoUpload" v-if="!uploadingVideo">
+      <video style="width:300px" :src="blobURL" v-if="numberOfVideos > 0"></video>
+      <button class="clear" @click="onVideoUpload" v-if="!uploadingVideo">
         <p v-if="numberOfVideos > 1">Upload Videos</p>
         <p v-else>Upload Video</p>
       </button>
-      <div class="center clear" v-if="uploadingVideo">
-        <h3 style="text-align:center" v-if="numberOfVideos > 1">Processing {{ videos[0].name }}...</h3>
-        <h3 style="text-align:center" v-else>Processing {{ videos[0].name }}...</h3>
-        <div class="center loader"></div>
+      <div class="clear" v-if="uploadingVideo">
+        <h3 v-if="numberOfVideos > 1">Processing {{ videos[0].name }}...</h3>
+        <h3 v-else>Processing {{ videos[0].name }}...</h3>
+        <div class="loader"></div>
       </div>
-    </form>
+    </form> -->
   </v-app>
 </template>
 
@@ -120,14 +143,14 @@
         const axios = require('axios');
         const path = 'http://localhost:8080/'; /* Not sure what to put here */
         this.outputImage = await axios.get(path);
-        this.uploadingImage = false;
+        /* this.uploadingImage = false; */
       },
       async onVideoUpload() {
         this.uploadingVideo = true;
         const axios = require('axios');
         const path = 'http://localhost:8080/'; /* Not sure what to put here */
         this.outputVideo = await axios.get(path);
-        this.uploadingVideo = false;
+        /* this.uploadingVideo = false; */
       },
       showImage(event, i) {
         var input = event.target;
@@ -161,6 +184,7 @@
     width: 50%;
     position: fixed;
     z-index: 1;
+    top: 200;
     overflow-x: hidden;
     padding-top: 20px;
     background-color: rgb(149, 214, 240);
@@ -203,6 +227,8 @@
   .mainImage {
     border: 1px solid rgb(119, 43, 43);
     padding: 5px;
+    width: 150px;
+    height: 150px;
   }
 
   .imageStack {
@@ -219,5 +245,51 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .area {
+    width: 20%;
+    height: 20%;
+    position: absolute;
+    border: 4px dashed #000;
+    background-image: url("http://kmtlondon.com/img/upload.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 64px 64px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    filter: alpha(opacity=50);
+    -khtml-opacity: 0.5;
+    -moz-opacity: 0.5;
+    opacity: 0.5;
+    text-align: center;
+  }
+
+  .area:hover,
+  .area.dragging,
+  .area.uploading {
+      filter: alpha(opacity=100);
+      -khtml-opacity: 1;
+      -moz-opacity: 1;
+      opacity: 1;
+  }
+
+  .area input {
+    width: 400%;
+    height: 100%;
+    margin-left: -300%;
+    border: none;
+    cursor: pointer;
+  }
+
+  .area input:focus {
+      outline: none;
+  }
+
+  .icon {
+    top: 20px;
+    width: 40px;
+    height: 40px;
   }
 </style>
