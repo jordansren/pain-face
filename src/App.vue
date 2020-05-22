@@ -9,19 +9,22 @@
     <!-- Image Upload -->
     <form class="split left center">
       <h3 style="text-align:center">Images</h3>
-      <input class="center" type="file" accept="image/jpeg,image/png" @change="onImageChosen" v-if="!isUploadingImage"><br>
+      <input class="center" type="file" accept="image/jpeg,image/png" @change="onImageChosen" v-if="!uploadingImage"><br>
+      <p style="text-align:center" v-if="wrongImageType">
+        Oops! You did not input an image of type png, jpeg, or jpg. <br> Current file to upload: {{ images[0].name }}
+      </p>
       <div class="image-preview" v-if="imageData.length > 0">
         <div v-for="img in imageData" :key="img">
           <img class="center preview imageStack" :src="img">
         </div>
       </div>
-      <button class="center clear" @click="onImageUpload" v-if="!isUploadingImage"> 
-        <p v-if="isMultipleImages">Upload Images</p>
+      <button class="center clear" @click="onImageUpload" v-if="!uploadingImage"> 
+        <p v-if="numberOfImages > 1">Upload Images</p>
         <p v-else>Upload Image</p>
       </button>
-      <div class="center clear" v-if="isUploadingImage">
-        <h3 style="text-align:center" v-if="isMultipleImages">Processing Images...</h3>
-        <h3 style="text-align:center" v-else>Processing Image...</h3>
+      <div class="center clear" v-if="uploadingImage">
+        <h3 style="text-align:center" v-if="numberOfImages > 1">Processing {{ images[0].name }}...</h3>
+        <h3 style="text-align:center" v-else>Processing {{ images[0].name }}...</h3>
         <div class="center loader"></div>
       </div>
     </form>
@@ -29,19 +32,18 @@
     <!-- Video Upload -->
     <form class="split right center">
       <h3 style="text-align:center">Videos</h3>
-      <input class="center" type="file" accept="video/*" @change="onVideoChosen" v-if="!isUploadingVideo"><br>
-<!--       <div class="image-preview" v-if="videoData.length > 0">
-        <div v-for="vid in videoData" :key="vid">
-          <img class="preview imageStack" :src="vid">
-        </div>
-      </div> -->
-      <button class="center clear" @click="onVideoUpload" v-if="!isUploadingVideo">
-        <p v-if="isMultipleVideos">Upload Videos</p>
+      <input class="center" type="file" accept="video/*" @change="onVideoChosen" v-if="!uploadingVideo"><br>
+      <p style="text-align:center" v-if="wrongVideoType">
+        Oops! You did not input an image of type png, jpeg, or jpg. <br> Current file to upload: {{ videos[0].name }}
+      </p>
+      <video style="width:300px" :src="blobURL" class="center" v-if="numberOfVideos > 0"></video>
+      <button class="center clear" @click="onVideoUpload" v-if="!uploadingVideo">
+        <p v-if="numberOfVideos > 1">Upload Videos</p>
         <p v-else>Upload Video</p>
       </button>
-      <div class="center clear" v-if="isUploadingVideo">
-        <h3 style="text-align:center" v-if="isMultipleVideos">Processing Videos...</h3>
-        <h3 style="text-align:center" v-else>Processing Video...</h3>
+      <div class="center clear" v-if="uploadingVideo">
+        <h3 style="text-align:center" v-if="numberOfVideo > 1">Processing {{ videos[0].name }}...</h3>
+        <h3 style="text-align:center" v-else>Processing {{ videos[0].name }}...</h3>
         <div class="center loader"></div>
       </div>
     </form>
@@ -55,26 +57,16 @@
         images: [],
         videos: [],
         imageData: [],
-        videoData: [],
         uploadingImage: false,
         uploadingVideo: false,
         outputImage: null,
-        outputVideo: null
+        outputVideo: null,
+        wrongImageType: false,
+        wrongVideoType: false,
+        blobURL: null
       }
     },
     computed: {
-      isMultipleImages() {
-        return this.images.length > 1;
-      },
-      isMultipleVideos() {
-        return this.videos.length > 1;
-      },
-      isUploadingImage() {
-        return this.uploadingImage;
-      },
-      isUploadingVideo() {
-        return this.uploadingVideo;
-      },
       numberOfImages() {
         return this.images.length;
       },
@@ -95,9 +87,12 @@
               if (this.images.length == 1) {
                 this.images = [];
                 this.imageData = [];
+                this.wrongImageType = false;
               }
               this.showImage(event, x)
               this.images.push(event.target.files[x]);
+            } else {
+              this.wrongImageType = true;
             }
           });
       },
@@ -113,9 +108,12 @@
               if (this.videos.length == 1) {
                 this.videos = [];
                 this.videoData = [];
-              }
-              /* this.showVideo(event, x); */
+                this.wrongVideoType = false;
+              } 
+              this.showVideo(event);
               this.videos.push(event.target.files[x]);
+            } else {
+              this.wrongVideoType = true;
             }
           });
       },
@@ -143,18 +141,10 @@
           reader.readAsDataURL(input.files[i]);
         }
       },
-/*       showVideo(event, i) {
-        var input = event.target;
-        if (input.files && input.files[i]) {
-          console.log(input.files[i]);
-          var reader = new FileReader();
-          reader.onload = (e) => {
-            console.log(e.target.result);
-              this.videoData.push(e.target.result);
-          }
-          reader.readAsDataURL(input.files[i]);
-        }
-      }, */
+      showVideo(event) {
+        let file = event.target.files[0];
+        this.blobURL = URL.createObjectURL(file);
+      },
       reset(fileType) {
         if (fileType == "image") {
           this.images = [];
@@ -169,109 +159,67 @@
 
 <style>
   .split {
-  height: 100%;
-  width: 50%;
-  position: fixed;
-  z-index: 1;
-  overflow-x: hidden;
-  padding-top: 20px;
-  background-color: rgb(149, 214, 240);
+    height: 100%;
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    overflow-x: hidden;
+    padding-top: 20px;
+    background-color: rgb(149, 214, 240);
   } 
 
-/* Control the left side */
-.left {
-  left: 0;
-  top: 200;
+  /* Control the left side */
+  .left {
+    left: 0;
+    top: 200;
+    }
+
+
+  /* Control the right side */
+  .right {
+    right: 0;
+    top: 200;
+  }
+    body{
+      background-color: rgb(149, 214, 240);
+    }
+
+  .loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
   }
 
-
-/* Control the right side */
-.right {
-  right: 0;
-  top: 200;
- }
-  body{
-    background-color: rgb(149, 214, 240);
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 
-.loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-img.preview {
-  width: 100px;
-  height: 70px;
-  background-color: white;
-  border: 1px solid #DDD;
-  padding: 5px;
-}
-
-.mainImage {
-  border: 1px solid rgb(119, 43, 43);
-  padding: 5px;
-}
-
-.imageStack {
-  padding: 5px;
-  display: block; 
-  position: relative;
-}
-
-.clear {
-  clear: both;
-}
-  /*
-  form{
-    margin-top: -100px;
-    margin-left: -250px;
-    width: 500px;
-    height: 200px;
-    border: 4px dashed #fff;
+  img.preview {
+    width: 300px;
+    background-color: white;
+    border: 1px solid #DDD;
+    padding: 5px;
   }
-  form p{
-    line-height: 170px;
-    color: #ffffff;
-    font-family: Arial;
+
+  .mainImage {
+    border: 1px solid rgb(119, 43, 43);
+    padding: 5px;
   }
-  form input{
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    outline: none;
-    opacity: 0;
+
+  .imageStack {
+    padding: 5px;
+    display: block; 
+    position: relative;
   }
-  form button{
-    margin: 0;
-    color: #fff;
-    background: #16a085;
-    border: none;
-    width: 508px;
-    height: 35px;
-    margin-top: -20px;
-    margin-left: -4px;
-    border-radius: 4px;
-    border-bottom: 4px solid #117A60;
-    transition: all .2s ease;
-    outline: none;
+
+  .clear {
+    clear: both;
   }
-  form button:hover{
-    background: #149174;
-    color: #0C5645;
-  }
-  form button:active{
-    border:0;
-  } */
+
   .center {
     display: block;
     margin-left: auto;
