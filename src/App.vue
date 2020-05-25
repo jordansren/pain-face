@@ -45,7 +45,7 @@
                 <div v-bind:class="{ area: true, withpreview: displayInputCard == 2}">
                   <input id="upload" type="file" accept="image/jpeg,image/png,image/jpg,video/mp4" @change="onFileChosen">
                   <v-img class="icon center" src="./assets/upload.png" alt="upload"></v-img>
-                  <p style="position:relative; top:-140px">Click or Drag to Choose Files</p>
+                  <p style="position:relative; top:-140px; z-index: 2;">Click or Drag to Choose Files</p>
                 </div>
                 <div>
                   <p style="text-align: center" v-if="wrongFileType">
@@ -235,7 +235,7 @@
     border: none;
     cursor: pointer;
     opacity: 0;
-    z-index: 2;
+    z-index: 3;
   }
 
   .area input:focus {
@@ -260,7 +260,7 @@
     top: -145px;
     width: 60px;
     height: 60px;
-    z-index: 1;
+    z-index: 2;
   }
 
   .inputcard {
