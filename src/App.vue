@@ -34,7 +34,7 @@
                   <v-btn rounded class="info" @click="onUpload" v-if="stage == 1">
                     Upload File
                   </v-btn>
-                  <v-btn rounded class="info" @click="reset" v-if="stage == 3" >
+                  <v-btn rounded class="info" @click="reset" v-if="stage == 3">
                     Upload Another File
                   </v-btn>
                 </v-card-actions> 
@@ -43,8 +43,9 @@
               <!-- Image Upload -->
               <div v-if="stage == 1">
                 <div v-bind:class="{ area: true, withpreview: displayInputCard == 2}">
-                  <v-img class="icon center" src="./assets/upload.png" alt="upload"></v-img>
                   <input id="upload" type="file" accept="image/jpeg,image/png,image/jpg,video/mp4" @change="onFileChosen">
+                  <v-img class="icon center" src="./assets/upload.png" alt="upload"></v-img>
+                  <p style="position:relative; top:-140px">Click or Drag to Choose Files</p>
                 </div>
                 <div>
                   <p style="text-align: center" v-if="wrongFileType">
@@ -53,10 +54,8 @@
                   <p style="text-align: center" v-else-if="fileType != null">
                     Preview:
                   </p>
-                  <div v-if="fileType=='image'">
-                    <img class="preview" :src="imageData">
-                  </div>
-                  <video class="preview" :src="blobURL" v-if="fileType=='video'"></video>
+                  <img :class="{preview: !wrongFileType, previewerror: wrongFileType}" :src="imageData" v-if="fileType=='image'">
+                  <video :class="preview" :src="blobURL" v-if="fileType=='video'"></video>
                 </div>
               </div>
 
@@ -72,9 +71,9 @@
               <!-- Return Processed Data -->
               <div v-if="stage == 3">
                 <div v-if="fileType=='image'">
-                  <img class="imageStack preview" :src="imageData">
+                  <img class="preview" :src="imageData">
                 </div>
-                <video class="imageStack preview" :src="blobURL" v-if="fileType=='video'"></video>
+                <video class="preview" :src="blobURL" v-if="fileType=='video'"></video>
                 <h1 v-if="fileType == 'image'" :img="outputImage" style="text-align: center;">
                   Mouse Face Pain Score: <br> {{ img }}
                 </h1>
@@ -202,41 +201,8 @@
 </script>
 
 <style>
-  body{
-    background-color: rgb(149, 214, 240);
-  }
-
-  .withpreview {
-    top: 300px;
-  }
-
-
-  img.preview {
-    max-width: 400px;
-    max-height: 200px;
-    background-color: white;
-    border: 1px solid #DDD;
-    padding: 5px;
-  }
-
-  .mainImage {
-    padding: 5px;
-    width: 150px;
-    height: 150px;
-  }
-
-  .clear {
-    clear: both;
-  }
-
-  .center {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
   .area {
-    width: 100%;
+    width: 500px;
     height: 200px;
     position: absolute;
     border: 4px dashed #000;
@@ -251,7 +217,7 @@
     -moz-opacity: 0.5;
     opacity: 0.5;
     text-align: center;
-    background-color: aqua;
+    background-color: white;
   }
 
   .area:hover,
@@ -269,11 +235,32 @@
     border: none;
     cursor: pointer;
     opacity: 0;
-    z-index: 1;
+    z-index: 2;
   }
 
   .area input:focus {
       outline: none;
+  }
+
+  body{
+    background-color: rgb(149, 214, 240);
+  }
+
+  .clear {
+    clear: both;
+  }
+
+  .center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .icon {
+    top: -145px;
+    width: 60px;
+    height: 60px;
+    z-index: 1;
   }
 
   .inputcard {
@@ -281,20 +268,33 @@
     height: 500px;
   }
 
+  .loadingcard {
+    width: 500px;
+    height: 50px;
+  }
+
+  .mainImage {
+    padding: 5px;
+    width: 150px;
+    height: 150px;
+  }
+
   .preview {
     padding: 2px;
     display: block;
     margin-left: auto;
     margin-right: auto; 
-    max-height: 200px;
+    max-height: 190px;
     max-width: 400px; 
   }
 
-  .icon {
-    top: 60px;
-    width: 60px;
-    height: 60px;
-    z-index: 2;
+  .previewerror {
+    padding: 2px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto; 
+    max-height: 150px;
+    max-width: 400px;
   }
 
   .smallinputcard {
@@ -302,8 +302,8 @@
     height: 264px;
   }
 
-  .loadingcard {
-    width: 500px;
-    height: 50px;
+  .withpreview {
+    top: 300px;
   }
+
 </style>
