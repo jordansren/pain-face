@@ -19,60 +19,70 @@
               <v-img class="mainImage center" src="./assets/Mouse.jpeg" alt="Mouse"></v-img>
             </v-card>
             <v-container grid-list-md></v-container>
-            <v-card class="elevation-12 inputcard">
-              <v-toolbar
-                color="primary"
-                dark
-                flat
-              >
+            <v-card class="elevation-12" v-bind:class="{
+              inputcard: displayInputCard == 2, 
+              smallinputcard: displayInputCard == 3,
+              loadingCard: displayInputCard == 1}"
+              style="max-width: 500px;">
+
+              <!-- Tool Bar -->
+              <v-toolbar color="primary" dark flat>
                 <v-toolbar-title>Accepted File Types: <br> jpg, png, jpeg, mp4</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn rounded class="info" style="text-align: center" @click="onUpload" v-if="stage == 1">
-                    <p style="top:20px">Upload File</p>
+                  <v-btn rounded class="info" @click="onUpload" v-if="stage == 1">
+                    Upload File
+                  </v-btn>
+                  <v-btn rounded class="info" @click="reset" v-if="stage == 3" >
+                    Upload Another File
                   </v-btn>
                 </v-card-actions> 
               </v-toolbar>
+
+              <!-- Image Upload -->
               <div v-if="stage == 1">
-                <div class="area">
+                <div v-bind:class="{ area: true, withpreview: displayInputCard == 2}">
                   <v-img class="icon center" src="./assets/upload.png" alt="upload"></v-img>
                   <input id="upload" type="file" accept="image/jpeg,image/png,image/jpg,video/mp4" @change="onFileChosen">
                 </div>
                 <div>
-                  <div class="preview" v-if="fileType=='image'">
-                    <img class="preview imageStack" :src="imageData">
-                  </div>
-                  <video class="preview imageStack" :src="blobURL" v-if="fileType=='video'"></video>
                   <p style="text-align: center" v-if="wrongFileType">
                     Oops! You did not input an file of type png, jpeg, jpg, or mp4. <br> Current file to upload: {{ file.name }}
                   </p>
+                  <p style="text-align: center" v-else-if="fileType != null">
+                    Preview:
+                  </p>
+                  <div v-if="fileType=='image'">
+                    <img class="preview" :src="imageData">
+                  </div>
+                  <video class="preview" :src="blobURL" v-if="fileType=='video'"></video>
                 </div>
               </div>
-              <div v-else>
-                <div class="clear center" v-if="stage == 2">
-                  <h3 style="text-align:center">Processing {{ file.name }}...</h3>
-                  <v-progress-linear
-                    indeterminate
-                    color="green"
-                  ></v-progress-linear>
-                </div>
+
+              <!-- Uploading Image -->
+              <div class="clear center" v-else-if="stage == 2">
+                <h3 style="text-align:center">Processing {{ file.name }}...</h3>
+                <v-progress-linear
+                  indeterminate
+                  color="green"
+                ></v-progress-linear>
               </div>
+
+              <!-- Return Processed Data -->
               <div v-if="stage == 3">
                 <div v-if="fileType=='image'">
-                  <img class="imageStack processedpreview center" :src="imageData">
+                  <img class="imageStack preview" :src="imageData">
                 </div>
-                <video class="imageStack processedpreview center" :src="blobURL" v-if="fileType=='video'"></video>
-                <h1 v-if="fileType == 'image'" :img="outputImage">
-                  Here is the data you want {{ img }}
+                <video class="imageStack preview" :src="blobURL" v-if="fileType=='video'"></video>
+                <h1 v-if="fileType == 'image'" :img="outputImage" style="text-align: center;">
+                  Mouse Face Pain Score: <br> {{ img }}
                 </h1>
-                <h1 v-if="fileType == 'video'" :vid="outputVideo">
-                  Here is the data you want {{ vid }}
+                <h1 v-if="fileType == 'video'" :vid="outputVideo" style="text-align: center">
+                  Mouse Face Pain Score: <br> {{ vid }}
                 </h1>
-                <v-btn rounded class="info center" @click="reset">
-                  <p style="top:20px">Upload Another File</p>
-                </v-btn>
               </div>
+
             </v-card>
           </v-col>
         </v-row>
@@ -86,8 +96,8 @@
     data() {
       return {
         file: null,
-        imageData: null,
-        blobURL: null,
+        imageData: "",
+        blobURL: "",
         fileType: null,
         uploadingFile: false,
         finishedUpload: false,
@@ -98,48 +108,57 @@
     },
     computed: {
       stage() {
-        if (!this.uploadingfile && !this.finishedUpload) {
+        if (!this.uploadingFile && !this.finishedUpload) {
           return 1;
         } else if (this.uploadingFile && !this.finishedUpload) {
           return 2;
         } else {
           return 3;
         }
-      }
+      },
+      displayInputCard() {
+        if (this.uploadingFile && !this.finishedUpload) {
+          return 1;
+        }
+        if (this.fileType!=null || this.wrongFileType) {
+          return 2;
+        } else {
+          return 3;
+        }
+      } 
     },
     methods: {
       onFileChosen(event) {
         /* Loop over files, check for correct file types*/
-        Array
-          .from(Array(event.target.files.length).keys())
-          .map(x => {
-            let tag = event.target.files[x].name.split(".")[1];
-            if (tag == "png" || tag == "jpeg" || tag == "jpg") {
-              /* Since we are only doing single files for now, this if statement
-                  will ensure only one file is stored at a time */
-              if (this.file != null) {
-                this.file = null;
-                this.imageData = null;
-              }
-              this.showImage(event, x)
-              this.wrongFileType = false;
-              this.fileType = "image";
-              this.file = event.target.files[x];
-            } else if (tag == "mp4") {
-              if (this.file != null) {
-                this.file = null;
-                this.blobURL = null;
-              }
-              this.wrongFileType = false;
-              this.showVideo(event);
-              this.fileType = "video";
-              this.file = event.target.files[x];
-            } else {
-              this.wrongFileType = true;
-            }
-          });
+        let tag = event.target.files[0].name.split(".")[1];
+        if (tag == "png" || tag == "jpeg" || tag == "jpg") {
+          /* Since we are only doing single files for now, this if statement
+              will ensure only one file is stored at a time */
+          if (this.file != null) {
+            this.file = null;
+            this.imageData = null;
+          }
+          this.showImage(event, 0)
+          this.wrongFileType = false;
+          this.fileType = "image";
+          this.file = event.target.files[0];
+        } else if (tag == "mp4") {
+          if (this.file != null) {
+            this.file = null;
+            this.blobURL = null;
+          }
+          this.wrongFileType = false;
+          this.showVideo(event);
+          this.fileType = "video";
+          this.file = event.target.files[0];
+        } else {
+          this.wrongFileType = true;  
+        }
       },
       async onUpload() {
+        if (this.file == null) {
+          return;
+        }
         this.uploadingFile = true;
 /*         let tag = this.file.name.split(".")[1];
         const axios = require('axios');
@@ -187,6 +206,10 @@
     background-color: rgb(149, 214, 240);
   }
 
+  .withpreview {
+    top: 300px;
+  }
+
 
   img.preview {
     max-width: 400px;
@@ -202,18 +225,12 @@
     height: 150px;
   }
 
-  .imageStack {
-    padding: 5px;
-    display: block; 
-    position: relative;
-  }
-
   .clear {
     clear: both;
   }
 
   .center {
-    display: inline-block;
+    display: block;
     margin-left: auto;
     margin-right: auto;
   }
@@ -265,14 +282,12 @@
   }
 
   .preview {
-    top: 200px;
+    padding: 2px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto; 
     max-height: 200px;
     max-width: 400px; 
-  }
-
-  .processedpreview {
-    max-height: 300px;
-    max-width: 480px; 
   }
 
   .icon {
@@ -280,5 +295,15 @@
     width: 60px;
     height: 60px;
     z-index: 2;
+  }
+
+  .smallinputcard {
+    width: 500px;
+    height: 264px;
+  }
+
+  .loadingcard {
+    width: 500px;
+    height: 50px;
   }
 </style>
