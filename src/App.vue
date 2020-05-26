@@ -57,7 +57,7 @@
                     Preview:
                   </p>
                   <img :class="{preview: !wrongFileType, previewerror: wrongFileType}" :src="imageData" v-if="fileType=='image'">
-                  <video :class="preview" :src="blobURL" v-if="fileType=='video'"></video>
+                  <video :class="{preview: !wrongFileType, previewerror: wrongFileType}" :src="blobURL" v-if="fileType=='video'"></video>
                 </div>
               </div>
 
