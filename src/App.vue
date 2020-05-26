@@ -27,7 +27,9 @@
 
               <!-- Tool Bar -->
               <v-toolbar color="primary" dark flat>
-                <v-toolbar-title>Accepted File Types: <br> jpg, png, jpeg, mp4</v-toolbar-title>
+                <v-toolbar-title v-if="stage == 1">Accepted File Types: <br> jpg, png, jpeg, mp4</v-toolbar-title>
+                <v-toolbar-title v-if="stage == 2">Uploading...</v-toolbar-title>
+                <v-toolbar-title v-if="stage == 3">Finished</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -128,28 +130,22 @@
     },
     methods: {
       onFileChosen(event) {
-        /* Loop over files, check for correct file types*/
         let tag = event.target.files[0].name.split(".")[1];
-        if (tag == "png" || tag == "jpeg" || tag == "jpg") {
-          /* Since we are only doing single files for now, this if statement
-              will ensure only one file is stored at a time */
+        if (tag == "png" || tag == "jpeg" || tag == "jpg" || tag == "mp4") {
           if (this.file != null) {
             this.file = null;
             this.imageData = null;
-          }
-          this.showImage(event, 0)
-          this.wrongFileType = false;
-          this.fileType = "image";
-          this.file = event.target.files[0];
-        } else if (tag == "mp4") {
-          if (this.file != null) {
-            this.file = null;
             this.blobURL = null;
           }
           this.wrongFileType = false;
-          this.showVideo(event);
-          this.fileType = "video";
           this.file = event.target.files[0];
+          if(tag == "mp4") {
+            this.showVideo(event);
+            this.fileType = "video";
+          } else {
+            this.showImage(event)
+            this.fileType = "image";
+          }
         } else {
           this.wrongFileType = true;  
         }
@@ -162,24 +158,23 @@
 /*         let tag = this.file.name.split(".")[1];
         const axios = require('axios');
         if (tag == "mp4") {
-          const path = 'http://localhost:8080/vidUpload';
+          const path = 'http://127.0.0.1:8000/vid-upload';
           this.outputImage = await axios.get(path);
         } else {
-          const path = 'http://localhost:8080/imgUpload';
+          const path = 'http://127.0.0.1:8000/img-upload';
           this.outputVideo = await axios.get(path);
-        } */
+        }
+        console.log(this.outputImage); */
         this.finishedUpload = true;
         this.uploadingFile = false;
       },
       showImage(event) {
         var input = event.target;
-        if (input.files && input.files[0]) {
-          var reader = new FileReader();
-          reader.onload = (e) => {
-              this.imageData = e.target.result;
-          }
-          reader.readAsDataURL(input.files[0]);
+        var reader = new FileReader();
+        reader.onload = (e) => {
+            this.imageData = e.target.result;
         }
+        reader.readAsDataURL(input.files[0]);
       },
       showVideo(event) {
         let file = event.target.files[0];
