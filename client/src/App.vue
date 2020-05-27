@@ -49,7 +49,7 @@
     },
     computed: {
       stage() {
-        console.log(this.girderRest.$parent);
+        console.log(this.girderRest);
         if (this.isLoggedOut) { return 1; } 
         else if (!this.imageUploaded && !this.finishedProcessing) { return 2; } 
         else { return 3; }

@@ -2,9 +2,7 @@
     <v-content>
         <v-container grid-list-md></v-container>
         <v-card class="elevation-12" v-bind:class="{
-            inputcard: displayInputCard == 2, 
-            smallinputcard: displayInputCard == 3,
-            loadingCard: displayInputCard == 1}"
+            inputcard: true}"
             style="max-width: 500px;">
 
             <!-- Tool Bar -->
@@ -21,16 +19,6 @@
             <div>
                 Your result is: 
             </div>
-<!--             <div v-if="fileType=='image'">
-                <img class="preview" :src="imageData">
-            </div>
-            <video class="preview" :src="blobURL" v-if="fileType=='video'"></video>
-            <h1 v-if="fileType == 'image'" :img="outputImage" style="text-align: center;">
-                Mouse Face Pain Score: <br> {{ img }}
-            </h1>
-            <h1 v-if="fileType == 'video'" :vid="outputVideo" style="text-align: center">
-                Mouse Face Pain Score: <br> {{ vid }}
-            </h1> -->
         </v-card>
     </v-content>
 </template>

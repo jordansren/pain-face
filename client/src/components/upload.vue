@@ -15,7 +15,7 @@
             </v-toolbar>
             <GirderUpload :dest="dest"
             :postUpload=onUpload :multiple=false
-            :accept="accepted"
+            :accept="accepted" :preUpload=userFolder
             @click="onUpload"></GirderUpload>
         </v-card>
     </v-content>
@@ -28,7 +28,10 @@ export default {
     inject: ['girderRest'],
     data() {
         return {
-            dest: {name: "./assets/user_files/" + this.user},
+            dest: {name: this.user + "/private",
+                    _id: "5eceadd795278a871c7532e6",
+                    _modelType: "folder"
+                    },
             accepted: "image/jpeg|image/jpg|image/png|video/mp4",
         }
     },
@@ -42,9 +45,9 @@ export default {
         onUpload() {
             this.$emit("uploaded");
         },
-        print() {
-            console.log(this.person);
-        }
+        userFolder() {
+            
+        },
     }
 }
 </script>
