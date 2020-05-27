@@ -1,0 +1,105 @@
+
+.area {
+width: 500px;
+height: 200px;
+position: absolute;
+border: 4px dashed #000;
+background-position: center;
+background-repeat: no-repeat;
+background-size: 64px 64px;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+filter: alpha(opacity=50);
+-khtml-opacity: 0.5;
+-moz-opacity: 0.5;
+opacity: 0.5;
+text-align: center;
+background-color: white;
+}
+
+.area:hover,
+.area.dragging,
+.area.uploading {
+    filter: alpha(opacity=100);
+    -khtml-opacity: 1;
+    -moz-opacity: 1;
+    opacity: 1;
+}
+
+.area input {
+width: 500px;  
+height: 200px;
+border: none;
+cursor: pointer;
+opacity: 0;
+z-index: 3;
+}
+
+.area input:focus {
+    outline: none;
+}
+
+body{
+background-color: rgb(149, 214, 240);
+}
+
+.clear {
+clear: both;
+}
+
+.center {
+display: block;
+margin-left: auto;
+margin-right: auto;
+}
+
+.icon {
+top: -145px;
+width: 60px;
+height: 60px;
+z-index: 2;
+}
+
+.inputcard {
+width: 500px;
+height: 500px;
+}
+
+.loadingcard {
+width: 500px;
+height: 50px;
+}
+
+.mainImage {
+padding: 5px;
+width: 150px;
+height: 150px;
+}
+
+.preview {
+padding: 2px;
+display: block;
+margin-left: auto;
+margin-right: auto; 
+max-height: 190px;
+max-width: 400px; 
+}
+
+.previewerror {
+padding: 2px;
+display: block;
+margin-left: auto;
+margin-right: auto; 
+max-height: 150px;
+max-width: 400px;
+}
+
+.smallinputcard {
+width: 500px;
+height: 264px;
+}
+
+.withpreview {
+top: 300px;
+}
