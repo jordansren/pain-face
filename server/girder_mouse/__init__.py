@@ -19,13 +19,13 @@ class MousePain(Resource):
     def __init__(self):
         super(MousePain, self).__init__()
         self.resourceName = "mouse_pain_face"
-        self.route("POST", (":id",), self.process)
+        self.route("POST", ("thing",), self.process)
 
 
     @access.user
     @autoDescribeRoute(Description("create folder with uploaded file")
-                        .m,odelParam())
-    def process(self,b):
-        return "Processing " + id 
+                        )
+    def process(self):
+        return "Processing "
 
 

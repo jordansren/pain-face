@@ -51,9 +51,7 @@ export default {
     },
     methods: {
         async onUpload() {
-            const res = await this.girderRest.post("mouse_pain_face/" + this.girderRest.user._id, stringify({
-                dest: this.dest
-            }))
+            const res = await this.girderRest.post("mouse_pain_face/thing")
             console.log(res.data);
             this.$emit("uploaded", res.data);
         },

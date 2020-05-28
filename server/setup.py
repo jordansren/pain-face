@@ -33,7 +33,7 @@ setup(
     zip_safe=False,
     entry_points={
         'girder.plugin': [
-            'girder_mouse = girder_mouse:GirderPlugin'
+            'girder_mouse = girder_mouse:MousePainPlugin'
         ]
     }
 )

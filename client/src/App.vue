@@ -21,7 +21,7 @@
             </v-card>
             <GirderAuth register style="width: 500px" v-if="stage == 1" />
             <upload v-if="stage == 2" :user="currentUserLogin" @uploaded="uploaded"></upload>
-            <result v-if="stage == 3" @newUpload="newUpload"></result>
+            <result v-if="stage == 3" :data="responseData" @newUpload="newUpload"></result>
           </v-col>
         </v-row>
       </v-container>
