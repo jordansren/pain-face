@@ -17,7 +17,7 @@
             </v-card-actions> 
             </v-toolbar>
             <div>
-                Your result is: 
+                Your result is: {{ data }}
             </div>
         </v-card>
     </v-content>
@@ -26,6 +26,7 @@
 <script>
 export default {
     name: 'result',
+    props: ['data'],
     methods: {
         newFile() {
             this.$emit('newUpload', true);

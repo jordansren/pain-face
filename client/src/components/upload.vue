@@ -15,24 +15,24 @@
             </v-toolbar>
             <GirderUpload :dest="dest"
             :postUpload=onUpload :multiple=false
-            :accept="accepted" :preUpload=userFolder
-            @click="onUpload"></GirderUpload>
+            :accept="accepted"
+            ></GirderUpload>
         </v-card>
     </v-content>
 </template>
 
 <script>
 import { Upload as GirderUpload } from '@girder/components/src/components';
+import { stringify } from 'qs';
+
 export default {
     name: 'upload',
     inject: ['girderRest'],
     data() {
         return {
-            dest: {name: this.user + "/private",
-                    _id: "5eceadd795278a871c7532e6",
-                    _modelType: "folder"
-                    },
+            dest: null,
             accepted: "image/jpeg|image/jpg|image/png|video/mp4",
+            userRandomId: null,
         }
     },
     components: {
@@ -41,12 +41,21 @@ export default {
     props: {
         user: String,
     },
+    async mounted () {
+        const res = await this.girderRest.post("folder", stringify({
+                parentType: "user",
+                parentId: this.girderRest.user._id,
+                name: 'Mouse Data ' + new Date().toISOString()
+        }))
+        this.dest = res.data;
+    },
     methods: {
-        onUpload() {
-            this.$emit("uploaded");
-        },
-        userFolder() {
-            
+        async onUpload() {
+            const res = await this.girderRest.post("mouse_pain_face/" + this.girderRest.user._id, stringify({
+                dest: this.dest
+            }))
+            console.log(res.data);
+            this.$emit("uploaded", res.data);
         },
     }
 }

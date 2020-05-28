@@ -45,6 +45,7 @@
       return {
         imageUploaded: false,
         finishedProcessing: false,
+        responseData: null
       }
     },
     computed: {
@@ -66,8 +67,9 @@
         this.imageUploaded = false;
         this.finishedProcessing = false;
       },
-      uploaded() {
+      uploaded(val) {
         this.imageUploaded = true;
+        this.responseData = val;
       },
     },
   }
