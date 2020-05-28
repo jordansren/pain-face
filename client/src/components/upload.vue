@@ -1,6 +1,5 @@
 <template>
     <v-content>
-        <v-container grid-list-md></v-container>
         <v-card class="elevation-12" v-bind:class="{
             inputcard:true}"
             style="max-width: 500px;">
@@ -30,7 +29,7 @@ export default {
     inject: ['girderRest'],
     data() {
         return {
-            dest: null,
+            dest: { name: this.girderRest.user.name },
             accepted: "image/jpeg|image/jpg|image/png|video/mp4",
             userRandomId: null,
         }
@@ -38,21 +37,20 @@ export default {
     components: {
         GirderUpload,
     },
-    props: {
-        user: String,
-    },
     async mounted () {
         const res = await this.girderRest.post("folder", stringify({
-                parentType: "user",
-                parentId: this.girderRest.user._id,
-                name: 'Mouse Data ' + new Date().toISOString()
+            parentType: "user",
+            parentId: this.girderRest.user._id,
+            name: 'Mouse Data ' + new Date().toISOString()
         }))
         this.dest = res.data;
     },
+    props: {
+        user: String,
+    },
     methods: {
         async onUpload() {
-            const res = await this.girderRest.post("mouse_pain_face/thing")
-            console.log(res.data);
+            const res = await this.girderRest.post("mouse_pain_face/" + this.dest._id)
             this.$emit("uploaded", res.data);
         },
     }

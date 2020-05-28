@@ -1,6 +1,5 @@
 <template>
     <v-content>
-        <v-container grid-list-md></v-container>
         <v-card class="elevation-12" v-bind:class="{
             inputcard: true}"
             style="max-width: 500px;">

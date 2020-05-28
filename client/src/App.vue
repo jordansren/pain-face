@@ -19,6 +19,7 @@
               <h1 class="display-2" style="text-align: center;">AMGS Upload Tool </h1>
               <v-img class="mainImage center" src="./assets/Mouse.jpeg" alt="Mouse"></v-img>
             </v-card>
+            <v-container grid-list-md></v-container>
             <GirderAuth register style="width: 500px" v-if="stage == 1" />
             <upload v-if="stage == 2" :user="currentUserLogin" @uploaded="uploaded"></upload>
             <result v-if="stage == 3" :data="responseData" @newUpload="newUpload"></result>
@@ -50,7 +51,6 @@
     },
     computed: {
       stage() {
-        console.log(this.girderRest);
         if (this.isLoggedOut) { return 1; } 
         else if (!this.imageUploaded && !this.finishedProcessing) { return 2; } 
         else { return 3; }
