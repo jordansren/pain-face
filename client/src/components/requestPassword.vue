@@ -27,7 +27,7 @@
                 @input="$v.email.$touch()"
                 @blur="$v.email.$touch()"
                 ></v-text-field>
-                <v-btn class="primary" style="left: 10px">
+                <v-btn class="primary submit">
                     Submit
                 </v-btn>
                 <v-alert type="success" style="top: 5px;" 
@@ -80,3 +80,10 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    .submit {
+        bottom: 10px;
+        left: 490px;
+    }
+</style>
