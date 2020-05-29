@@ -17,7 +17,7 @@
                 </v-btn>
             </v-card-actions> 
             </v-toolbar>
-            <v-form>
+            <v-form ref="submit" @submit.prevent="resetPass">
                 <v-text-field
                 v-model="email"
                 style="padding: 10px"
@@ -27,8 +27,7 @@
                 @input="$v.email.$touch()"
                 @blur="$v.email.$touch()"
                 ></v-text-field>
-                <v-btn class="primary" style="left: 10px" 
-                    ref="submit" @click.prevent="resetPass">
+                <v-btn class="primary" style="left: 10px">
                     Submit
                 </v-btn>
                 <v-alert type="success" style="top: 5px;" 
