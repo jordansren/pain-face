@@ -20,9 +20,15 @@
               <v-img class="mainImage center" src="./assets/Mouse.jpeg" alt="Mouse"></v-img>
             </v-card>
             <v-container grid-list-md></v-container>
-            <GirderAuth register style="width: 600px" v-if="stage == 1" />
+            <GirderAuth :register="true" @forgotpassword="forgotPassword"
+                style="width: 600px" v-if="stage == 1 && hasPassword"  /> <!-- :oauth="true" -->
+            <requestPassword v-if="stage == 1 && !hasPassword"
+                @relogin="hasPassword = true"    
+            >
+            </requestPassword>
             <upload v-if="stage == 2" :user="currentUserLogin" 
-                @uploaded="uploaded" @logout="logOut">
+                @uploaded="uploaded" @logout="logOut"
+                >
             </upload>
             <result v-if="stage == 3" :data="responseData" 
                 @newUpload="newUpload" :user="currentUserLogin"
@@ -39,6 +45,7 @@
   import { Authentication as GirderAuth } from '@girder/components/src/components';
   import upload from './components/upload.vue';
   import result from './components/result.vue';
+  import requestPassword from './components/requestPassword.vue';
 
   export default {
     inject: ['girderRest'],
@@ -46,12 +53,14 @@
       GirderAuth,
       upload,
       result,
+      requestPassword,
     },
     data() {
       return {
         imageUploaded: false,
         finishedProcessing: false,
-        responseData: null
+        responseData: null,
+        hasPassword: true,
       }
     },
     computed: {
@@ -72,15 +81,17 @@
         this.imageUploaded = false;
         this.finishedProcessing = false;
       },
-      uploaded(val) {
+      uploaded(data) {
         this.imageUploaded = true;
-        this.responseData = val;
+        this.responseData = data;
       },
       logOut() {
-        console.log('last layer');
         this.girderRest.user = null;
         this.imageUploaded = false;
         this.finishedProcessing = false;
+      },
+      forgotPassword() {
+        this.hasPassword = false;
       }
     },
   }

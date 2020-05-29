@@ -12,6 +12,10 @@ margin-left: auto;
 margin-right: auto;
 }
 
+.emailform {
+padding: 10px;
+}
+
 .icon {
 top: -145px;
 width: 60px;
@@ -33,6 +37,11 @@ height: 50px;
 padding: 5px;
 width: 150px;
 height: 150px;
+}
+
+.password-button {
+top: 5px;
+right: 10px;
 }
 
 .preview {

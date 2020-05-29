@@ -35,7 +35,6 @@ export default {
     },
     methods: {
         logout() {
-            console.log('first layer');
             this.$emit('logout');
         },
         handler(item) {

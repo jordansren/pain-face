@@ -38,7 +38,6 @@ export default {
             this.$emit('newUpload', true);
         },
         logOut() {
-            console.log('second layer');
             this.$emit("logout"); 
         }
     }

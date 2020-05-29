@@ -50,11 +50,10 @@ export default {
     },
     methods: {
         async onUpload() {
-            const res = await this.girderRest.post("mouse_pain_face/" + this.dest._id)
+            const res = await this.girderRest.post("mouse_pain_face/" + this.dest._id);
             this.$emit("uploaded", res.data);
         },
         logOut() {
-            console.log('second layer');
             this.$emit('logout');
         }
     }
