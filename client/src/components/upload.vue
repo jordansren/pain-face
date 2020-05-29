@@ -2,19 +2,17 @@
     <v-content>
         <v-card class="elevation-12" v-bind:class="{
             inputcard:true}"
-            style="max-width: 500px;">
+            style="max-width: 600px;">
 
             <!-- Tool Bar -->
             <v-toolbar color="primary" dark flat>
             <v-toolbar-title>Accepted File Types: jpg, png, jpeg, mp4</v-toolbar-title>
             <v-spacer></v-spacer>
-            <div v-if="user != ''">
-                Logged in as: <br> {{ user }}
-            </div>
+            <dropdown :user="user" @logout="logOut"></dropdown>
             </v-toolbar>
             <GirderUpload :dest="dest"
-            :postUpload=onUpload :multiple=false
-            :accept="accepted"
+                :postUpload=onUpload :multiple=false
+                :accept="accepted"
             ></GirderUpload>
         </v-card>
     </v-content>
@@ -23,6 +21,7 @@
 <script>
 import { Upload as GirderUpload } from '@girder/components/src/components';
 import { stringify } from 'qs';
+import dropdown from './dropdown.vue';
 
 export default {
     name: 'upload',
@@ -36,6 +35,7 @@ export default {
     },
     components: {
         GirderUpload,
+        dropdown,
     },
     async mounted () {
         const res = await this.girderRest.post("folder", stringify({
@@ -53,6 +53,10 @@ export default {
             const res = await this.girderRest.post("mouse_pain_face/" + this.dest._id)
             this.$emit("uploaded", res.data);
         },
+        logOut() {
+            console.log('second layer');
+            this.$emit('logout');
+        }
     }
 }
 </script>

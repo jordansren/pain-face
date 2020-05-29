@@ -15,14 +15,19 @@
             md="4"
           >
             <!-- Always present -->
-            <v-card class="elevation-12" style="width:500px">
-              <h1 class="display-2" style="text-align: center;">AMGS Upload Tool </h1>
+            <v-card class="elevation-12" style="width:600px">
+              <h1 class="display-2" style="text-align: center;">AMGS Upload Tool</h1>
               <v-img class="mainImage center" src="./assets/Mouse.jpeg" alt="Mouse"></v-img>
             </v-card>
             <v-container grid-list-md></v-container>
-            <GirderAuth register style="width: 500px" v-if="stage == 1" />
-            <upload v-if="stage == 2" :user="currentUserLogin" @uploaded="uploaded"></upload>
-            <result v-if="stage == 3" :data="responseData" @newUpload="newUpload"></result>
+            <GirderAuth register style="width: 600px" v-if="stage == 1" />
+            <upload v-if="stage == 2" :user="currentUserLogin" 
+                @uploaded="uploaded" @logout="logOut">
+            </upload>
+            <result v-if="stage == 3" :data="responseData" 
+                @newUpload="newUpload" :user="currentUserLogin"
+                @logout="logOut">
+            </result>
           </v-col>
         </v-row>
       </v-container>
@@ -71,6 +76,12 @@
         this.imageUploaded = true;
         this.responseData = val;
       },
+      logOut() {
+        console.log('last layer');
+        this.girderRest.user = null;
+        this.imageUploaded = false;
+        this.finishedProcessing = false;
+      }
     },
   }
 </script>
