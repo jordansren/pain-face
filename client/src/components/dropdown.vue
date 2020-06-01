@@ -30,7 +30,7 @@ export default {
     },
     data() {
         return {
-            items: [{ title: 'logout' },]
+            items: [{ title: 'Logout' },]
         }
     },
     methods: {
@@ -38,7 +38,7 @@ export default {
             this.$emit('logout');
         },
         handler(item) {
-            if (item.title == "logout") {
+            if (item.title == "Logout") {
                 this.logout;
             }
         }

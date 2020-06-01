@@ -1,17 +1,17 @@
 <template>
     <v-content>
         <v-card class="elevation-12" 
-            style="max-width: 600px;">
+            >
 
             <!-- Tool Bar -->
             <v-toolbar color="primary" dark flat>
-            <v-toolbar-title>Accepted File Types: jpg, png, jpeg, mp4</v-toolbar-title>
+            <v-toolbar-title class="text-wrap">File Types: jpg, png, jpeg, mp4</v-toolbar-title>
             <v-spacer></v-spacer>
             <dropdown :user="user" @logout="logOut"></dropdown>
             </v-toolbar>
             <GirderUpload :dest="dest"
                 :postUpload=onUpload :multiple=false
-                :accept="accepted" :preUpload=createFolder
+                :accept="accepted"
             ></GirderUpload>
         </v-card>
     </v-content>
@@ -31,18 +31,19 @@ export default {
                     _id: null,
                     _modelType: null,
             },
-            accepted: "image/jpeg|image/jpg|image/png|video/mp4",
-            userRandomId: null,
+            /* PROBLEM WITH ACCEPTING ONLY TYPES BELOW */
+            accepted: "image/jpeg,image/jpg,image/png,video/mp4",
+            user: this.girderRest.user.login,
         }
     },
     components: {
         GirderUpload,
         dropdown,
     },
-    props: {
-        user: String,
-    },
     async mounted () {
+            if (this.girderRest.user == null) {
+                this.$router.push('/');
+            }
             const res = await this.girderRest.post("folder", stringify({
                 parentType: "user",
                 parentId: this.girderRest.user._id,
@@ -54,10 +55,21 @@ export default {
     methods: {
         async onUpload() {
             const res = await this.girderRest.post("mouse_pain_face/" + this.dest._id);
-            this.$emit("uploaded", res.data);
+            this.$router.push({
+                name: 'Result',
+                params: {
+                    data: res.data,
+                }
+            });
         },
         logOut() {
-            this.$emit('logout');
+            this.girderRest.user = null;
+            this.$router.push('/');
+        }
+    },
+    computed: {
+        loggedIn() {
+            return !(this.girderRest.user == null);
         }
     }
 }

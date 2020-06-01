@@ -1,6 +1,19 @@
 <template>
   <v-app id="app">
-    <router-view></router-view>
+    <v-content>
+      <v-container class="fill-height" fluid>
+        <v-row align="center" justify="center">
+          <v-col cols="12" sm="8" md="4">
+            <v-card class="elevation-12" >
+              <h1 class="display-2" style="text-align: center;">AMGS Upload Tool</h1>
+              <v-img class="mainImage center" src="./assets/Mouse.jpeg" alt="Mouse"></v-img>
+            </v-card>
+            <v-container grid-list-md></v-container>
+            <router-view></router-view>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-content>
   </v-app>
 </template>
 
@@ -9,4 +22,15 @@
   }
 </script>
 <style scoped>
+  .center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .mainImage {
+    padding: 5px;
+    width: 150px;
+    height: 150px;
+  }
 </style>

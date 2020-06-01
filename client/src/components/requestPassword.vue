@@ -2,35 +2,32 @@
     <v-content>
         <v-card class="elevation-12" v-bind:class="{
             inputcard: true}"
-            style="max-width: 600px;">
+            >
 
             <!-- Tool Bar -->
             <v-toolbar color="primary" dark flat>
-            <v-card-actions></v-card-actions>
-            <v-spacer>
                 <v-card-title>Forgot Password</v-card-title>
-            </v-spacer>
-            <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn rounded class="info" @click="backToLogin">
+                <v-btn class="primary" @click="backToLogin">
                     Login
                 </v-btn>
-            </v-card-actions> 
             </v-toolbar>
             <v-form ref="submit" @submit.prevent="resetPass">
                 <v-text-field
                 v-model="email"
-                style="padding: 10px"
+                style="padding: 25px"
                 :error-messages="emailErrors"
                 label="E-mail"
                 required
                 @input="$v.email.$touch()"
                 @blur="$v.email.$touch()"
                 ></v-text-field>
-                <v-btn class="primary submit">
-                    Submit
-                </v-btn>
-                <v-alert type="success" style="top: 5px;" 
+                <div class="text-right">
+                    <v-btn class="primary submit" @click="resetPass">
+                        Submit
+                    </v-btn>
+                </div>
+                <v-alert type="info" style="top: 5px;" 
                 class="emailform" :email="email" v-if="submitted">
                     An email with password reset instructions was sent to {{ email }}
                 </v-alert>
@@ -65,7 +62,7 @@ export default {
     },
     methods: {
         backToLogin() {
-            this.$emit('relogin');
+            this.$router.push('/');
         },
         async resetPass() {
             if (this.emailErrors.length > 0 || this.email.length == 0) {
@@ -83,7 +80,7 @@ export default {
 
 <style scoped>
     .submit {
-        bottom: 10px;
-        left: 490px;
+        bottom: 20px;
+        right: 25px;
     }
 </style>
