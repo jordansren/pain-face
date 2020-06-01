@@ -21,16 +21,16 @@
             </v-card>
             <v-container grid-list-md></v-container>
             <GirderAuth :register="true" @forgotpassword="forgotPassword"
-                style="width: 600px" v-if="stage == 1 && hasPassword"  /> <!-- :oauth="true" -->
-            <requestPassword v-if="stage == 1 && !hasPassword"
+                style="width: 600px" v-if="stage == 'login' && hasPassword"  /> <!-- :oauth="true" -->
+            <requestPassword v-if="stage == 'login' && !hasPassword"
                 @relogin="hasPassword = true"    
             >
             </requestPassword>
-            <upload v-if="stage == 2" :user="currentUserLogin" 
+            <upload v-if="stage == 'upload'" :user="currentUserLogin" 
                 @uploaded="uploaded" @logout="logOut"
                 >
             </upload>
-            <result v-if="stage == 3" :data="responseData" 
+            <result v-if="stage == 'results'" :data="responseData" 
                 @newUpload="newUpload" :user="currentUserLogin"
                 @logout="logOut">
             </result>
@@ -65,9 +65,9 @@
     },
     computed: {
       stage() {
-        if (this.isLoggedOut) { return 1; } 
-        else if (!this.imageUploaded && !this.finishedProcessing) { return 2; } 
-        else { return 3; }
+        if (this.isLoggedOut) { return "login"; } 
+        else if (!this.imageUploaded && !this.finishedProcessing) { return "upload"; } 
+        else { return "results"; }
       }, 
       currentUserLogin() {
         return this.girderRest.user ? this.girderRest.user.login : 'anonymous';
@@ -96,5 +96,16 @@
     },
   }
 </script>
-<style scoped src="@/assets/styles.css">
+<style scoped>
+  .center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .mainImage {
+    padding: 5px;
+    width: 150px;
+    height: 150px;
+  }
 </style>
