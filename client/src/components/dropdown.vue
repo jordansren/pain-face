@@ -4,7 +4,8 @@
       <template v-slot:activator="{ on }">
         <v-btn
           color="primary"
-          dark  :user="user"
+          dark
+          :user="user"
           v-on="on"
         >
           {{ user }}
@@ -25,22 +26,25 @@
 
 <script>
 export default {
-    props: {
-        user: String
+  props: {
+    user: {
+      type: String,
+      default: 'anonymous',
     },
-    inject: ['girderRest'],
-    data() {
-        return {
-            items: [{ title: 'Logout' },]
-        }
+  },
+  inject: ['girderRest'],
+  data() {
+    return {
+      items: [{ title: 'Logout' }],
+    };
+  },
+  methods: {
+    handler(item) {
+      if (item.title === 'Logout') {
+        this.girderRest.user = null;
+        this.$router.push('/');
+      }
     },
-    methods: {
-        handler(item) {
-            if (item.title == "Logout") {
-              this.girderRest.user = null;
-              this.$router.push('/');
-            }
-        }
-    }
-}
+  },
+};
 </script>

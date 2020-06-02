@@ -1,15 +1,34 @@
 <template>
   <v-app id="app">
     <v-content>
-      <v-container class="fill-height" fluid>
-        <v-row align="center" justify="center">
-          <v-col cols="12" sm="8" md="4">
-            <v-card class="elevation-12" >
-              <h1 class="display-2" style="text-align: center;">AMGS Upload Tool</h1>
-              <v-img class="mainImage center" src="./assets/Mouse.jpeg" alt="Mouse"></v-img>
+      <v-container
+        class="fill-height"
+        fluid
+      >
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <v-col
+            cols="12"
+            sm="8"
+            md="4"
+          >
+            <v-card class="elevation-12">
+              <h1
+                class="display-2"
+                style="text-align: center;"
+              >
+                AMGS Upload Tool
+              </h1>
+              <v-img
+                class="mainImage center"
+                src="./assets/Mouse.jpeg"
+                alt="Mouse"
+              />
             </v-card>
-            <v-container grid-list-md></v-container>
-            <router-view></router-view>
+            <v-container grid-list-md />
+            <router-view />
           </v-col>
         </v-row>
       </v-container>
@@ -18,8 +37,8 @@
 </template>
 
 <script>
-  export default {
-  }
+export default {
+};
 </script>
 <style scoped>
   .center {
