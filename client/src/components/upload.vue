@@ -7,7 +7,7 @@
             <v-toolbar color="primary" dark flat>
             <v-toolbar-title class="text-wrap">File Types: jpg, png, jpeg, mp4</v-toolbar-title>
             <v-spacer></v-spacer>
-            <dropdown :user="user" @logout="logOut"></dropdown>
+            <dropdown :user="user"></dropdown>
             </v-toolbar>
             <GirderUpload :dest="dest"
                 :postUpload=onUpload :multiple=false
@@ -62,10 +62,6 @@ export default {
                 }
             });
         },
-        logOut() {
-            this.girderRest.user = null;
-            this.$router.push('/');
-        }
     },
     computed: {
         loggedIn() {

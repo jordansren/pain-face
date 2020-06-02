@@ -10,7 +10,7 @@
                 Upload
             </v-btn>
             <v-spacer></v-spacer>
-            <dropdown :user="user" @logout="logOut"></dropdown>
+            <dropdown :user="user"></dropdown>
             </v-toolbar>
             <div>
                 Your result is: {{ data }}
@@ -43,10 +43,6 @@ export default {
         newFile() {
             this.$router.push('/upload');
         },
-        logOut() {
-            this.girderRest.user = null;
-            this.$router.push('/');
-        }
     }
 }
 </script>

@@ -14,7 +14,7 @@
         <v-list-item
           v-for="(item, index) in items"
           :key="index"
-          @click="logout"
+          @click="handler(item)"
         >
           <v-list-item-title>{{ item.title }}</v-list-item-title>
         </v-list-item>
@@ -28,18 +28,17 @@ export default {
     props: {
         user: String
     },
+    inject: ['girderRest'],
     data() {
         return {
             items: [{ title: 'Logout' },]
         }
     },
     methods: {
-        logout() {
-            this.$emit('logout');
-        },
         handler(item) {
             if (item.title == "Logout") {
-                this.logout;
+              this.girderRest.user = null;
+              this.$router.push('/');
             }
         }
     }

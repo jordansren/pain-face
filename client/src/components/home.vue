@@ -1,7 +1,7 @@
 <template>
     <v-content>
         <GirderAuth :register="true" @forgotpassword="forgotPassword"
-             /> <!-- :oauth="true" -->
+             :hide-forgot-password=true /> <!-- :oauth="true" -->
     </v-content>
 </template>
 
