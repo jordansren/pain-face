@@ -19,11 +19,11 @@
                 class="display-2"
                 style="text-align: center;"
               >
-                AMGS Upload Tool
+                Pain Face
               </h1>
               <v-img
                 class="mainImage center"
-                src="./assets/Mouse.jpeg"
+                src="./assets/pain-face.svg"
                 alt="Mouse"
               />
             </v-card>
