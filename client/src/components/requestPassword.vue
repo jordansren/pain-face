@@ -6,16 +6,20 @@
 
             <!-- Tool Bar -->
             <v-toolbar color="primary" dark flat>
-                <v-card-title>Forgot Password</v-card-title>
+                <v-card-title>Reset Password</v-card-title>
                 <v-spacer></v-spacer>
                 <v-btn class="primary" @click="backToLogin">
-                    Login
+                    Log In
                 </v-btn>
             </v-toolbar>
             <v-form ref="submit" @submit.prevent="resetPass">
+                <v-alert type="info" 
+                class="emailform" :email="email" v-if="submitted">
+                    An email with password reset instructions was sent to {{ email }}
+                </v-alert>
                 <v-text-field
                 v-model="email"
-                style="padding: 25px"
+                style="padding: 15px"
                 :error-messages="emailErrors"
                 label="E-mail"
                 required
@@ -24,13 +28,9 @@
                 ></v-text-field>
                 <div class="text-right">
                     <v-btn class="primary submit" @click="resetPass">
-                        Submit
+                        Reset
                     </v-btn>
                 </div>
-                <v-alert type="info" style="top: 5px;" 
-                class="emailform" :email="email" v-if="submitted">
-                    An email with password reset instructions was sent to {{ email }}
-                </v-alert>
             </v-form>
         </v-card>
     </v-content>
@@ -81,6 +81,6 @@ export default {
 <style scoped>
     .submit {
         bottom: 20px;
-        right: 25px;
+        right: 15px;
     }
 </style>
