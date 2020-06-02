@@ -1,0 +1,16 @@
+{
+    "name": "Pain Face",
+    "short_name": "PainFace",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#2A3443",
+    "description": "A file upload app for assessing mouse pain",
+    "theme_color": "#2A3443",
+    "icons": [
+      {
+        "src": "./pain-face.svg",
+        "sizes": "792x612",
+        "purpose": "maskable any"
+      }
+    ]
+  }
