@@ -49,7 +49,7 @@ export default {
   },
   computed: {
     loggedIn() {
-      return !(this.girderRest.user == null);
+      return !(this.girderRest.user === null);
     },
   },
   methods: {
@@ -63,7 +63,7 @@ export default {
       });
     },
     async createFolder() {
-      if (this.girderRest.user == null) {
+      if (this.girderRest.user === null) {
         this.$router.push('/');
       }
       const res = await this.girderRest.post('folder', stringify({
