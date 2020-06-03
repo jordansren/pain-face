@@ -48,7 +48,7 @@ export default {
     };
   },
   mounted() {
-    if (this.girderRest.user == null) {
+    if (this.girderRest.user === null) {
       this.$router.push('/');
     }
   },

@@ -39,9 +39,9 @@ export default {
     };
   },
   methods: {
-    handler(item) {
+    async handler(item) {
       if (item.title === 'Logout') {
-        this.girderRest.user = null;
+        await this.girderRest.logout();
         this.$router.push('/');
       }
     },

@@ -21,12 +21,12 @@ export default {
       return this.girderRest.user ? this.girderRest.user.login : 'anonymous';
     },
     loggedIn() {
-      return this.girderRest.user == null;
+      return this.girderRest.user === null;
     },
   },
   watch: {
     loggedIn() {
-      if (!(this.girderRest.user == null)) {
+      if (!(this.girderRest.user === null)) {
         this.$router.push({
           name: 'Upload',
         });
