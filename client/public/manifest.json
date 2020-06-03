@@ -8,7 +8,7 @@
     "theme_color": "#2A3443",
     "icons": [
       {
-        "src": "./test.png",
+        "src": "./img/pain-face.png",
         "sizes": "200x200",
         "purpose": "maskable any"
       }
