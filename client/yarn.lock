@@ -822,10 +822,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@girder/components@^2.2.2":
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/@girder/components/-/components-2.2.2.tgz#aa00f15d6e84d03d7721d837c70e6f56aeae4c41"
-  integrity sha512-W/iZ11rN7LEPxWQLDZ2YcwYjXJz7fpD/kA4oZHPAGtmM/loQVRqg8KyGv3tM3tkl2ohO/TokgDLMuqFmK4kv8g==
+"@girder/components@^2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@girder/components/-/components-2.2.3.tgz#1474c094901ce936ba4126646c179b0711a242e8"
+  integrity sha512-gYj/PA702bJmqaMqOrbXaC5BTfH5Oc+kfmJCYpDNm9PSG0IACW5gD4diLyHYpLvVpKtYdP3dyclQdZ0OmQT8uA==
   dependencies:
     "@mdi/font" "^3.5.95"
     axios "^0.18.1"
@@ -6666,7 +6666,7 @@ qs@6.7.0:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
   integrity sha512-VCdBRNFTX1fyE7Nb6FYoURo/SPe62QCaAyzJvUjwRaIsc+NePBEniHlvxFmmX56+HZphIGtV0XeCirBtpDrTyQ==
 
-qs@^6.5.2:
+qs@^6.5.2, qs@^6.9.4:
   version "6.9.4"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.4.tgz#9090b290d1f91728d3c22e54843ca44aea5ab687"
   integrity sha512-A1kFqHekCTM7cz0udomYUoYNWjBebHm/5wzU/XqrBRBNWectVH0QIiN+NEcZ0Dte5hvzHwbr8+XQmguPhJ6WdQ==
@@ -8290,6 +8290,11 @@ vue-loader@^15.9.1:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-router@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.3.2.tgz#0099de402edb2fe92f9711053ab5a2156f239cad"
+  integrity sha512-5sEbcfb7MW8mY8lbUVbF4kgcipGXsagkM/X+pb6n0MhjP+RorWIUTPAPSqgPaiPOxVCXgAItBl8Vwz8vq78faA==
+
 vue-style-loader@^4.1.0, vue-style-loader@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-4.1.2.tgz#dedf349806f25ceb4e64f3ad7c0a44fba735fcf8"
@@ -8315,6 +8320,11 @@ vue@^2.6.10, vue@^2.6.11:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==
+
+vuelidate@^0.7.5:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/vuelidate/-/vuelidate-0.7.5.tgz#ff48c75ae9d24ea24c24e9ea08065eda0a0cba0a"
+  integrity sha512-GAAG8QAFVp7BFeQlNaThpTbimq3+HypBPNwdkCkHZZeVaD5zmXXfhp357dcUJXHXTZjSln0PvP6wiwLZXkFTwg==
 
 vuetify-loader@^1.4.4:
   version "1.4.4"

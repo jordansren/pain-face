@@ -1,34 +1,61 @@
 <template>
-    <v-content>
-        <v-card class="elevation-12"
-            style="max-width: 500px;">
-
-            <!-- Tool Bar -->
-            <v-toolbar color="primary" dark flat>
-            <v-toolbar-title>Finished</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn rounded class="info" @click="newFile">
-                Upload Another File
-                </v-btn>
-            </v-card-actions> 
-            </v-toolbar>
-            <div>
-                Your result is: {{ data }}
-            </div>
-        </v-card>
-    </v-content>
+  <v-content>
+    <v-card
+      class="elevation-12"
+      :class="{
+        inputcard: true}"
+    >
+      <!-- Tool Bar -->
+      <v-toolbar
+        color="primary"
+        dark
+        flat
+      >
+        <v-btn
+          class="primary"
+          @click="newFile"
+        >
+          Upload
+        </v-btn>
+        <v-spacer />
+        <dropdown :user="user" />
+      </v-toolbar>
+      <div>
+        Your result is: {{ data }}
+      </div>
+    </v-card>
+  </v-content>
 </template>
 
 <script>
+import dropdown from './dropdown.vue';
+
 export default {
-    name: 'result',
-    props: ['data'],
-    methods: {
-        newFile() {
-            this.$emit('newUpload', true);
-        }
+  name: 'Result',
+  inject: ['girderRest'],
+  components: {
+    dropdown,
+  },
+  props: {
+    data: {
+      type: Object,
+      default: () => {},
+    },
+  },
+  data() {
+    return {
+      user: this.girderRest.user.login,
+    };
+  },
+  mounted() {
+    if (this.girderRest.user === null) {
+      this.$router.push('/');
     }
-}
+  },
+  methods: {
+    newFile() {
+      this.$router.push('/upload');
+    },
+  },
+};
 </script>
