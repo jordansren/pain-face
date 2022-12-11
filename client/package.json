@@ -10,7 +10,7 @@
   "dependencies": {
     "@girder/components": "^2.2.3",
     "core-js": "^3.6.4",
-    "qs": "^6.9.4",
+    "qs": "^6.9.7",
     "vue": "^2.6.11",
     "vue-router": "^3.3.2",
     "vuelidate": "^0.7.5",
